@@ -1,5 +1,4 @@
 import numpy as np
-from cell import Cell
 
 class Grid:
     def __init__(self, grid_values):
@@ -38,16 +37,19 @@ class Grid:
         square_x_end_coord = square_x_start_coord + 3
         
         return self.cells[square_y_start_coord : square_y_end_coord, square_x_start_coord : square_x_end_coord].flatten()
-        
-        
-def generate_cells(grid_values):
-    grid_cells = np.ndarray(grid_values.shape, dtype='O')
+    
+def generate_grid(filename):
+    grid_values = np.loadtxt('%s.csv' %filename, delimiter=',', dtype='U')
+    grid_values[grid_values == ' '] = '0'
+    grid_values = grid_values.astype('i')
+    return Grid(grid_values)
 
-    for y_coord in range(grid_values.shape[0]):
-        for x_coord in range(grid_values.shape[1]):
-            cell_coords = (y_coord, x_coord)
-            
-            cell_value = grid_values[cell_coords]
-            grid_cells[cell_coords] = Cell(cell_value, cell_coords)
-
-    return grid_cells
+def print_grid(grid):
+    grid_values = grid.get_values()
+    
+    print('')
+    for y_coord in range(grid.shape[0]):
+        print('%s %s %s' %(grid_values[y_coord, : 3], grid_values[y_coord, 3 : 6], grid_values[y_coord, 6 : 9]))
+        
+        if y_coord % 3 == 2 and y_coord != 8:
+            print('')

@@ -1,5 +1,6 @@
-from utilities import get_grid, solve
+from grid import generate_grid
+from utilities import  solve
 
-grid = get_grid('grid')
+grid = generate_grid('grid')
 solve(grid)
 print('\n' + 'No more solutions')

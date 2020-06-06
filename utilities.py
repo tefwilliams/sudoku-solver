@@ -1,11 +1,4 @@
-import numpy as np
-from grid import Grid
-
-def get_grid(filename):
-    grid_values = np.loadtxt('%s.csv' %filename, delimiter=',', dtype='U')
-    grid_values[grid_values == ' '] = '0'
-    grid_values = grid_values.astype('i')
-    return Grid(grid_values)
+from grid import print_grid
 
 def solve(grid):
     for y_coord in range(grid.shape[0]):
@@ -43,13 +36,3 @@ def possible(grid, cell_coords, potential_value):
             return False
         
     return True
-
-def print_grid(grid):
-    grid_values = grid.get_values()
-    
-    print('')
-    for y_coord in range(grid.shape[0]):
-        print('%s %s %s' %(grid_values[y_coord, : 3], grid_values[y_coord, 3 : 6], grid_values[y_coord, 6 : 9]))
-        
-        if y_coord % 3 == 2 and y_coord != 8:
-            print('')
