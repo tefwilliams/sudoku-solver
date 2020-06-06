@@ -1,4 +1,5 @@
 import numpy as np
+from cell import generate_cells
 
 class Grid:
     def __init__(self, grid_values):
