@@ -1,10 +1,12 @@
 import numpy as np
 from cell import generate_cells
+from utilities import possible
 
 class Grid:
     def __init__(self, grid_values):
         self.shape = grid_values.shape
         self.cells = generate_cells(grid_values)
+        self.cannot_deduce = False
     
     def get_values(self):
         grid_values = np.zeros(self.shape)
@@ -16,6 +18,23 @@ class Grid:
                 grid_values[cell_coords] = self.cells[cell_coords].value
                 
         return grid_values
+    
+    def is_solved(self):
+        for cell in self.cells.flatten():
+            if not cell.is_solved():
+                return False
+            
+        return True
+    
+    def is_wrong(self):
+        for cell in self.cells.flatten():
+            if not cell.is_solved() and cell.has_no_potential_values():
+                return True
+            
+            elif cell.is_solved() and not possible(self, cell.coords, cell.value):
+                return True
+            
+        return False
     
     def get_row(self, cell_coords):
         y_coord = cell_coords[0]
@@ -45,10 +64,15 @@ def generate_grid(filename):
     grid_values = grid_values.astype('i')
     return Grid(grid_values)
 
-def print_grid(grid):
+def print_grid(grid, run_time):
     grid_values = grid.get_values()
     
-    print('')
+    if grid.is_wrong():
+        print('\n' + 'Failed to solve' + '\n')
+        return
+        
+    print('\n' + 'Solved in %.2f seconds' %(run_time) + '\n')
+
     for y_coord in range(grid.shape[0]):
         print('%s %s %s' %(grid_values[y_coord, : 3], grid_values[y_coord, 3 : 6], grid_values[y_coord, 6 : 9]))
         
