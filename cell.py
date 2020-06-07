@@ -8,7 +8,8 @@ class Cell:
     def __init__(self, value, coords):
         self.value = value
         self.coords = coords
-        self.potential_values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.potential_values = ([] if self.is_solved()
+                                 else [1, 2, 3, 4, 5, 6, 7, 8, 9])
         
     def is_solved(self):
         return self.value != 0

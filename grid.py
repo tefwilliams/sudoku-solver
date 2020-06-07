@@ -12,7 +12,6 @@ class Grid:
     def __init__(self, grid_values):
         self.shape = grid_values.shape
         self.cells = self.generate_cells(grid_values)
-        self.cannot_deduce = False
     
     def get_values(self):
         grid_values = np.zeros(self.shape)

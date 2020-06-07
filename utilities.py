@@ -30,7 +30,7 @@ def deduce(grid):
         if cell.is_solved():
             continue
         
-        check_potential_values(grid, cell)
+        cell = check_potential_values(grid, cell)
                     
         if cell.was_changed:
             grid.cannot_deduce = False
@@ -74,6 +74,8 @@ def check_potential_values(grid, cell):
         if not possible(grid, cell.coords, potential_value):
             cell.potential_values.remove(potential_value)
             cell.was_changed = True
+            
+    return cell
         
 def possible(grid, cell_coords, potential_value):
     row = grid.get_row(cell_coords)
