@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 """
 Created on Sun Jun  7 11:15:18 2020
 
-@author: tefwi
+@author: tefwilliams
 """
 
 from utilities import solve
-from grid_utilities import load_grid, print_grid
+from grid import load_grid, print_grid
 from time import time
 
 grid = load_grid('grid')
