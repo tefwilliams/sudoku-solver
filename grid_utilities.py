@@ -18,7 +18,11 @@ def print_grid(grid, run_time):
     grid_values = grid.get_values()
     
     if grid.is_wrong():
-        print('\n' + 'Failed to solve' + '\n')
+        print('\n' + 'Failed to solve')
+        return
+    
+    if not grid.is_solved():
+        print('\n' + 'Took too long to solve')
         return
         
     print('\n' + 'Solved in %.2f seconds' %(run_time) + '\n')

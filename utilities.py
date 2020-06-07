@@ -75,7 +75,6 @@ def check_potential_values(grid, cell):
             cell.potential_values.remove(potential_value)
             cell.was_changed = True
         
-                        
 def possible(grid, cell_coords, potential_value):
     row = grid.get_row(cell_coords)
     column = grid.get_column(cell_coords)
