@@ -103,7 +103,7 @@ def print_grid(grid, run_time):
     print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
 
     for y_coord in range(grid.shape[0]):
-        print('%s %s %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))
+        print('%s  %s  %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))
 
         if y_coord % 3 == 2 and y_coord != 8:
             print('')
