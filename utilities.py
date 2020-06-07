@@ -1,6 +1,11 @@
-from copy import deepcopy
-from cell import get_unsolved_cell
+"""
+Created on Sun Jun  7 11:15:18 2020
+
+@author: tefwi
+"""
+
 import numpy as np
+from copy import deepcopy
 from time import time
 
 def solve(grid):
@@ -46,7 +51,7 @@ def deduce(grid):
             
 def guess(grid):
     grid_copy = deepcopy(grid)
-    unsolved_cell = get_unsolved_cell(grid_copy)
+    unsolved_cell = grid_copy.get_unsolved_cell()
     
     number_of_potential_values = len(unsolved_cell.potential_values)
     random_index = np.random.randint(number_of_potential_values)

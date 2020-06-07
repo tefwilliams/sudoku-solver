@@ -1,8 +1,14 @@
-from grid import generate_grid, print_grid
-from time import time
-from utilities import  solve
+"""
+Created on Sun Jun  7 11:15:18 2020
 
-grid = generate_grid('grid')
+@author: tefwi
+"""
+
+from utilities import solve
+from grid_utilities import load_grid, print_grid
+from time import time
+
+grid = load_grid('grid')
 start_time = time()
 grid = solve(grid)
 run_time = time() - start_time
