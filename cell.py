@@ -8,7 +8,7 @@ Created on Sun Jun  7 11:15:18 2020
 
 class Cell:
     def __init__(self, value, coords):
-        self.value = value
+        self.value = int(value)
         self.coords = coords
         self.potential_values = ([] if self.is_solved()
                                  else [1, 2, 3, 4, 5, 6, 7, 8, 9])

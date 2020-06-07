@@ -16,7 +16,7 @@ class Grid:
         self.cells = generate_cells(grid_values)
 
     def get_values(self):
-        grid_values = np.zeros(self.shape)
+        grid_values = np.empty(self.shape, dtype='i')
 
         for y_coord in range(self.shape[0]):
             for x_coord in range(self.shape[1]):
@@ -100,7 +100,7 @@ def print_grid(grid, run_time):
         print('\n' + 'Took too long to solve')
         return
 
-    print('\n' + 'Solved in %.2f seconds' % run_time + '\n')
+    print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
 
     for y_coord in range(grid.shape[0]):
         print('%s %s %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))
