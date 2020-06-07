@@ -25,24 +25,12 @@ def deduce(grid):
     grid.cannot_deduce = True
     
     for cell in grid.cells.flatten():
+        cell.was_changed = False
+        
         if cell.is_solved():
             continue
         
-        cell.was_changed = False
-        
-        if len(cell.potential_values) == 1:
-            only_potential_value = cell.potential_values[0]
-            
-            if possible(grid, cell.coords, only_potential_value):
-                cell.value = cell.potential_values[0]
-                
-            cell.potential_values.remove(only_potential_value)
-            cell.was_changed = True
-        
-        for potential_value in cell.potential_values:
-            if not possible(grid, cell.coords, potential_value):
-                cell.potential_values.remove(potential_value)
-                cell.was_changed = True
+        check_potential_values(grid, cell)
                     
         if cell.was_changed:
             grid.cannot_deduce = False
@@ -71,6 +59,21 @@ def guess(grid):
         return grid
     
     return grid_copy
+
+def check_potential_values(grid, cell):
+    if len(cell.potential_values) == 1:
+        only_potential_value = cell.potential_values[0]
+        
+        if possible(grid, cell.coords, only_potential_value):
+            cell.value = cell.potential_values[0]
+            
+        cell.potential_values.remove(only_potential_value)
+        cell.was_changed = True
+    
+    for potential_value in cell.potential_values:
+        if not possible(grid, cell.coords, potential_value):
+            cell.potential_values.remove(potential_value)
+            cell.was_changed = True
         
                         
 def possible(grid, cell_coords, potential_value):
@@ -78,16 +81,9 @@ def possible(grid, cell_coords, potential_value):
     column = grid.get_column(cell_coords)
     square = grid.get_square(cell_coords)
     
-    for cell in row:
-        if cell.value == potential_value and cell.coords != cell_coords:
-            return False
-        
-    for cell in column:
-        if cell.value == potential_value and cell.coords != cell_coords:
-            return False
-        
-    for cell in square:
-        if cell.value == potential_value and cell.coords != cell_coords:
-            return False
-        
+    for cell_block in row, column, square:
+        for cell in cell_block:
+            if cell.value == potential_value and cell.coords != cell_coords:
+                return False
+            
     return True

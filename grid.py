@@ -51,10 +51,8 @@ class Grid:
     
     def is_wrong(self):
         for cell in self.cells.flatten():
-            if not cell.is_solved() and cell.has_no_potential_values():
-                return True
-            
-            elif cell.is_solved() and not possible(self, cell.coords, cell.value):
+            if (not cell.is_solved() and cell.has_no_potential_values() or
+                cell.is_solved() and not possible(self, cell.coords, cell.value)):
                 return True
             
         return False
