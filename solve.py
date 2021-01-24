@@ -22,4 +22,6 @@ except SolveError as err:
 else:
     run_time = time() - start_time
     grid_solver.display_result(solved_grid, run_time)
+
+print('')
     

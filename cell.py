@@ -22,3 +22,8 @@ class Cell:
     def set_value(self, value):
         self.potential_values.remove(value)
         self.value = value
+
+    def is_wrong(self, grid):
+        return ((not self.is_solved() and self.has_no_potential_values())
+            or (self.is_solved() and not grid.possible(self.coords, self.value)))
+

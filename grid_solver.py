@@ -74,31 +74,18 @@ def check_potential_values(grid, cell):
     if len(cell.potential_values) == 1:
         only_potential_value = cell.potential_values[0]
 
-        if possible(grid, cell.coords, only_potential_value):
+        if grid.possible(cell.coords, only_potential_value):
             cell.value = cell.potential_values[0]
 
         cell.potential_values.remove(only_potential_value)
         cell.was_changed = True
 
     for potential_value in cell.potential_values:
-        if not possible(grid, cell.coords, potential_value):
+        if not grid.possible(cell.coords, potential_value):
             cell.potential_values.remove(potential_value)
             cell.was_changed = True
 
     return cell
-
-
-def possible(grid, cell_coords, potential_value):
-    row = grid.get_row(cell_coords)
-    column = grid.get_column(cell_coords)
-    square = grid.get_square(cell_coords)
-
-    for cell_block in row, column, square:
-        for cell in cell_block:
-            if cell.value == potential_value and cell.coords != cell_coords:
-                return False
-
-    return True
 
 def display_result(grid, run_time):
     print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
