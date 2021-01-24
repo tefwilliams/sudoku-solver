@@ -78,14 +78,6 @@ class Grid:
     
         return True
 
-
-def load_grid(filename):
-    grid_values = np.loadtxt('%s.csv' % filename, delimiter=',', dtype='U')
-    grid_values[grid_values == ' '] = '0'
-    grid_values = grid_values.astype('i')
-    return Grid(grid_values)
-
-
 def generate_cells(grid_values):
     grid_cells = np.ndarray(grid_values.shape, dtype='O')
 
@@ -97,13 +89,3 @@ def generate_cells(grid_values):
             grid_cells[cell_coords] = Cell(cell_value, cell_coords)
 
     return grid_cells
-
-
-def print_grid(grid):
-    grid_values = grid.get_values()
-
-    for y_coord in range(grid.shape[0]):
-        print('%s  %s  %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))
-
-        if y_coord % 3 == 2 and y_coord != 8:
-            print('')
