@@ -7,7 +7,6 @@ Created on Sun Jun  7 11:15:18 2020
 
 import numpy as np
 from cell import Cell
-from utilities import possible
 
 
 class Grid:
@@ -41,7 +40,7 @@ class Grid:
     def is_wrong(self):
         for cell in self.cells.flatten():
             if (not cell.is_solved() and cell.has_no_potential_values() or
-                    cell.is_solved() and not possible(self, cell.coords, cell.value)):
+                cell.is_solved() and not self.possible(cell.coords, cell.value)):
                 return True
 
         return False
@@ -67,6 +66,18 @@ class Grid:
         square_x_end_coord = square_x_start_coord + 3
 
         return self.cells[square_y_start_coord: square_y_end_coord, square_x_start_coord: square_x_end_coord].flatten()
+    
+    def possible(self, cell_coords, potential_value):
+        row = self.get_row(cell_coords)
+        column = self.get_column(cell_coords)
+        square = self.get_square(cell_coords)
+    
+        for cell_block in row, column, square:
+            for cell in cell_block:
+                if cell.value == potential_value and cell.coords != cell_coords:
+                    return False
+    
+        return True
 
 
 def load_grid(filename):
@@ -89,18 +100,8 @@ def generate_cells(grid_values):
     return grid_cells
 
 
-def print_grid(grid, run_time):
+def print_grid(grid):
     grid_values = grid.get_values()
-
-    if grid.is_wrong():
-        print('\n' + 'Failed to solve')
-        return
-
-    if not grid.is_solved():
-        print('\n' + 'Took too long to solve')
-        return
-
-    print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
 
     for y_coord in range(grid.shape[0]):
         print('%s  %s  %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))

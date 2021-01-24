@@ -8,18 +8,24 @@ Created on Sun Jun  7 11:15:18 2020
 import numpy as np
 from copy import deepcopy
 from time import time
-
+from errors import SolveError
+from grid import print_grid
 
 def solve(grid):
     start_time = time()
-    while not grid.is_solved() and not grid.is_wrong():
+    while not grid.is_solved():
+        if grid.is_wrong():
+             raise SolveError("Failed to solve")
+             break
+            
+        if time() - start_time > 5:
+            raise SolveError("Failed to solve in time")
+            break
+            
         grid = deduce(grid)
 
         if grid.cannot_deduce:
             grid = guess(grid)
-
-        if time() - start_time > 5:
-            break
 
     return grid
 
@@ -54,13 +60,12 @@ def guess(grid):
     original_cell = grid.cells[unsolved_cell.coords]
     original_cell.potential_values.remove(guess_value)
 
-    grid_copy = solve(grid_copy)
+    try:
+        grid_copy = solve(grid_copy)
 
-    if grid_copy.is_wrong():
+    except SolveError:
         if not grid.is_wrong():
             return guess(grid)
-
-        return grid
 
     return grid_copy
 
@@ -94,3 +99,7 @@ def possible(grid, cell_coords, potential_value):
                 return False
 
     return True
+
+def display_result(grid, run_time):
+    print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
+    print_grid(grid)

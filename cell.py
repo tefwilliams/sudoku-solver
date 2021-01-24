@@ -18,3 +18,7 @@ class Cell:
 
     def has_no_potential_values(self):
         return len(self.potential_values) == 0
+    
+    def set_value(self, value):
+        self.potential_values.remove(value)
+        self.value = value
