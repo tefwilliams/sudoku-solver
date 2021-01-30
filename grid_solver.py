@@ -10,17 +10,18 @@ from copy import deepcopy
 from time import time
 from errors import SolveError
 from grid import Grid
+from cell import Cell
 
-def solve(grid):
+
+def solve(grid: Grid) -> Grid:
     start_time = time()
+    
     while not grid.is_solved():
         if grid.is_wrong():
              raise SolveError("Failed to solve")
-             break
             
         if time() - start_time > 5:
             raise SolveError("Failed to solve in time")
-            break
             
         grid = deduce(grid)
 
@@ -30,7 +31,7 @@ def solve(grid):
     return grid
 
 
-def deduce(grid):
+def deduce(grid: Grid) -> Grid:
     grid.cannot_deduce = True
 
     for cell in grid.cells.flatten():
@@ -47,7 +48,7 @@ def deduce(grid):
     return grid
 
 
-def guess(grid):
+def guess(grid: Grid) -> Grid:
     grid_copy = deepcopy(grid)
     unsolved_cell = grid_copy.get_unsolved_cell()
 
@@ -70,7 +71,7 @@ def guess(grid):
     return grid_copy
 
 
-def check_potential_values(grid, cell):
+def check_potential_values(grid: Grid, cell: Cell) -> Cell:
     if len(cell.potential_values) == 1:
         only_potential_value = cell.potential_values[0]
 
@@ -87,19 +88,19 @@ def check_potential_values(grid, cell):
 
     return cell
 
-def display_result(grid, run_time):
+def display_result(grid: Grid, run_time: float) -> None:
     print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
     print_grid(grid)
 
 
-def load_grid(filename):
+def load_grid(filename: str) -> Grid:
     grid_values = np.loadtxt('%s.csv' % filename, delimiter=',', dtype='U')
     grid_values[grid_values == ' '] = '0'
     grid_values = grid_values.astype('i')
     return Grid(grid_values)
 
 
-def print_grid(grid):
+def print_grid(grid: Grid) -> None:
     grid_values = grid.get_values()
 
     for y_coord in range(grid.shape[0]):

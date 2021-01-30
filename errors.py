@@ -7,5 +7,5 @@ Created on Sat Sep 26 16:24:24 2020
 
 
 class SolveError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         self.message = message
