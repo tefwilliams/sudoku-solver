@@ -15,14 +15,14 @@ from cell import Cell
 
 def solve(grid: Grid) -> Grid:
     start_time = time()
-    
+
     while not grid.is_solved():
         if grid.is_wrong():
-             raise SolveError("Failed to solve")
-            
+            raise SolveError("Failed to solve")
+
         if time() - start_time > 5:
             raise SolveError("Failed to solve in time")
-            
+
         grid = deduce(grid)
 
         if grid.cannot_deduce:
@@ -88,15 +88,16 @@ def check_potential_values(grid: Grid, cell: Cell) -> Cell:
 
     return cell
 
+
 def display_result(grid: Grid, run_time: float) -> None:
-    print('\n' + 'Solved in %ims' %(run_time * 1000) + '\n')
+    print("\n" + "Solved in %ims" % (run_time * 1000) + "\n")
     print_grid(grid)
 
 
 def load_grid(filename: str) -> Grid:
-    grid_values = np.loadtxt('%s.csv' % filename, delimiter=',', dtype='U')
-    grid_values[grid_values == ' '] = '0'
-    grid_values = grid_values.astype('i')
+    grid_values = np.loadtxt(f"./data/{filename}.csv", delimiter=",", dtype="U")
+    grid_values[grid_values == " "] = "0"
+    grid_values = grid_values.astype("i")
     return Grid(grid_values)
 
 
@@ -104,7 +105,14 @@ def print_grid(grid: Grid) -> None:
     grid_values = grid.get_values()
 
     for y_coord in range(grid.shape[0]):
-        print('%s  %s  %s' % (grid_values[y_coord, : 3], grid_values[y_coord, 3: 6], grid_values[y_coord, 6: 9]))
+        print(
+            "%s  %s  %s"
+            % (
+                grid_values[y_coord, :3],
+                grid_values[y_coord, 3:6],
+                grid_values[y_coord, 6:9],
+            )
+        )
 
         if y_coord % 3 == 2 and y_coord != 8:
-            print('')
+            print("")
