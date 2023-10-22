@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jun  7 11:15:18 2020
-
-@author: tefwilliams
-"""
-
 from time import time
 from grid_solver import load_grid, solve_grid, print_grid
 
