@@ -10,6 +10,7 @@ try:
 
 except ValueError as err:
     print(f"\n{err}\n")
+    print_grid(initial_grid)
 
 else:
     run_time_ms = (end_time - start_time) * 1000

@@ -10,16 +10,16 @@ def solve_grid(grid: Grid) -> Grid:
 
     while not grid.is_solved:
         if grid.is_wrong:
-            print_grid(grid)
             raise ValueError("Failed to solve")
 
-        if time() - start_time > 5:
-            raise ValueError("Failed to solve in time")
+        # if time() - start_time > 5:
+        #     raise ValueError("Failed to solve in time")
 
         success = grid.try_deduce()
 
         if not success:
-            pass
+            print('Going to have to guess')
+            grid = guess(grid)
 
     return grid
 
@@ -33,19 +33,14 @@ def guess(grid: Grid) -> Grid:
         if not cell.value
     )
 
-    number_of_potential_values = len(unsolved_cell.__potential_values)
-    random_index = np.random.randint(number_of_potential_values)
-
-    guess_value = unsolved_cell.__potential_values[random_index]
-    unsolved_cell.value = guess_value
-
     original_cell = grid[index]
-    original_cell.__potential_values.remove(guess_value)
+    guess_value = original_cell.potential_values.pop()
+    unsolved_cell.value = guess_value
 
     try:
         grid_copy = solve_grid(grid_copy)
 
-    except ValueError:
+    except (ValueError, KeyError):
         if not grid.is_wrong:
             return guess(grid)
 

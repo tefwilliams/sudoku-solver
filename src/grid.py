@@ -8,8 +8,9 @@ class Grid(list[Cell]):
     def __init__(self, values: list[list[int | None]]):
         assert len(values) == 9 and all(len(row) == 9 for row in values)
 
-        super().__init__([Cell(cell) for cell in flatten(values)])
-        grid = np.array(self)
+        cells = [[Cell(cell) for cell in row] for row in values]
+        super().__init__(flatten(cells))
+        grid = np.array(cells)
 
         self.rows = get_rows(grid)
         self.cols = get_cols(grid)
@@ -58,6 +59,6 @@ def get_squares(cells: np.ndarray):
         row_min = (i // 3) * 3
         col_min = (i % 3) * 3
 
-        squares.append(CellBlock(cells[row_min : row_min + 3, col_min : col_min + 3]))
+        squares.append(CellBlock(cells[row_min : row_min + 3, col_min : col_min + 3].flatten()))
 
     return squares
