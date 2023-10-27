@@ -16,10 +16,12 @@ class Grid(list[Cell]):
         self.cols = get_cols(grid)
         self.squares = get_squares(grid)
 
+        self.update_possible_values()
+
     @property
     def is_solved(self):
         return all(
-            cell_block.is_wrong
+            cell_block.is_solved
             for cell_block 
             in self.rows + self.cols + self.squares
         )
@@ -37,11 +39,22 @@ class Grid(list[Cell]):
         return [[cell.value for cell in row] for row in self.rows]
     
     def try_deduce(self):
-        return any(
+        made_change = any(
             cell_block.try_deduce()
             for cell_block 
             in self.rows + self.cols + self.squares
         )
+
+        if made_change:
+            self.update_possible_values()
+
+        return made_change
+
+    def update_possible_values(self):
+        for cell_block in (
+            self.rows + self.cols + self.squares
+        ):
+            cell_block.update_possible_values()
 
 
 def get_rows(cells: np.ndarray):

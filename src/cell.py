@@ -6,11 +6,7 @@ class Cell:
         assert value is None or value in allowed_values
         self.__value = value
         # TODO - Maybe use set
-        self.potential_values = set([] if value else allowed_values)
-
-    @property
-    def is_solved(self) -> bool:
-        return self.__value is not None
+        self.possible_values = set([] if value else allowed_values)
     
     @property
     def value(self):
@@ -18,8 +14,9 @@ class Cell:
 
     @value.setter
     def value(self, value: int) -> None:
-        self.potential_values.remove(value)
+        self.possible_values.clear()
         self.__value = value
 
+    # Yuck
     def has_no_possible_value(self):
-        return not self.is_solved and len(self.potential_values) == 0
+        return not self.value and len(self.possible_values) == 0
