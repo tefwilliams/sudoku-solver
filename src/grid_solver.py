@@ -50,16 +50,3 @@ def load_grid(path: str):
         grid = csv.reader(file, delimiter=",")
 
         return Grid([[int(col) if col != " " else None for col in row] for row in grid])
-
-
-def print_grid(grid: Grid) -> None:
-    for i, row in enumerate(grid.values):
-        print(
-            f"{row[:3]}  {row[3:6]}  {row[6:9]}".replace(",", "")
-            .replace("None", "-")
-            .replace("[", "")
-            .replace("]", "")
-        )
-
-        if i in [2, 5]:
-            print("")

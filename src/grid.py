@@ -56,6 +56,21 @@ class Grid(list[Cell]):
         ):
             cell_block.update_possible_values()
 
+    def __str__(self):
+        return "\n".join(
+            f"""\
+{row[0:3]}  \
+{row[3:6]}  \
+{row[6:9]}  \
+{"\n" if i in [2, 5] else ""}\
+"""
+                .replace(",", "")
+                .replace("None", "-")
+                .replace("[", "")
+                .replace("]", "")
+            for i, row in enumerate(self.values)
+        )
+
 
 def get_rows(cells: np.ndarray):
     return [CellBlock(cells[i]) for i in range(9)]
