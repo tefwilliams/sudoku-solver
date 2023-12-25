@@ -1,6 +1,8 @@
 import csv
+from helpers import null_value
 from time import time
 from grid import Grid
+import numpy as np
 
 
 def solve_grid(grid: Grid) -> Grid:
@@ -13,7 +15,7 @@ def solve_grid(grid: Grid) -> Grid:
         if time() - start_time > 5:
             raise TimeoutError("Failed to solve in time")
 
-        success = grid.try_deduce()
+        success = try_deduce(grid)
 
         if not success:
             return guess(grid)
@@ -21,18 +23,39 @@ def solve_grid(grid: Grid) -> Grid:
     return grid
 
 
+def try_deduce(grid: Grid):
+    for row in range(9):
+        for col in range(9):
+            if grid.values[row, col] != null_value:
+                continue
+
+            grid.values[row, col] = (
+                grid.get_single_possible_value(row, col) or
+                grid.get_unique_possible_value(row, col)
+            )
+
+            if grid.values[row, col] != null_value:
+                return True
+
+    return False
+
+
 def guess(grid: Grid) -> Grid:
-    grid_copy = Grid(grid.values)
-    unsolved_cell, index = next(
-        (cell, i) 
-        for i, cell 
-        in enumerate(grid_copy)
-        if not cell.value
+    grid_copy = Grid(grid.values.copy())
+    row, col = next(
+        coords
+        for coords, value
+        in np.ndenumerate(grid_copy.values)
+        if value == null_value
     )
 
-    original_cell = grid[index]
-    guess_value = original_cell.possible_values.pop()
-    unsolved_cell.value = guess_value
+    guess_value = grid.get_possible_values(row, col).pop()
+
+    if (row, col) not in grid.guesses:
+        grid.guesses[(row, col)] = set()
+
+    grid.guesses[(row, col)].add(guess_value)
+    grid_copy.values[row, col] = guess_value
 
     try:
         return solve_grid(grid_copy)
@@ -40,13 +63,20 @@ def guess(grid: Grid) -> Grid:
     except (ValueError, KeyError):
         if grid.is_wrong:
             raise ValueError("Grid is corrupted")
-        
-        return guess(grid)
 
+        return guess(grid)
 
 
 def load_grid(path: str):
     with open(path, newline="") as file:
         grid = csv.reader(file, delimiter=",")
 
-        return Grid([[int(col) if col != " " else None for col in row] for row in grid])
+        return Grid(np.array([
+            [
+                int(col)
+                if col != " "
+                else null_value
+                for col in row
+            ]
+            for row in grid
+        ]))
